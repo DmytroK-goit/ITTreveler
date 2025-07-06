@@ -1,5 +1,6 @@
 <script setup>
 import FavoritePlace from './components/FavoritePlace/FavoritePlace.vue'
+import FavoritePlaces from './components/FavoritePlaces/FavoritePlaces.vue'
 import HomepageView from './views/HomepageView.vue'
 
 // const isDesktop = window.innerWidth > 1024
@@ -14,5 +15,5 @@ import HomepageView from './views/HomepageView.vue'
   <div :key="ch" v-for="ch in 'Pruvit'">{{ ch }}</div> -->
 
   <!-- <HomepageView /> -->
-  <FavoritePlace />
+  <FavoritePlaces />
 </template>
