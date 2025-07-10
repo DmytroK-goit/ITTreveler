@@ -3,6 +3,15 @@ import { ref } from 'vue'
 
 const props = defineProps({
   label: String,
+  placeholder: String,
+  type: {
+    type: String,
+    default: 'text',
+  },
+})
+
+defineOptions({
+  inheritAttrs: false, // щоб не передавати атрибути в input, а тільки ті, що вказані в props
 })
 
 const text = ref('')
@@ -14,12 +23,13 @@ const changeValue = (e) => {
 <template>
   <div class="w-full text-[#2c2c2c]">
     <label for="" class="block">
-      <span class="block text-xs px-3 mb-2">{{ props.label }}:{{ text }}</span>
+      <span class="block text-xs px-3 mb-2">{{ props.label }}</span>
       <input
         class="w-full text-sm rounded-[4px] border-[1px] py-2 px-3 focus:outline-primary"
-        type="text"
+        v-bind="{ ...$props, ...$attrs }"
         @input="changeValue"
       />
+      <!-- пропси :type="props.type" :placeholder="props.placeholder" всі пропси v-bind="props"-->
     </label>
   </div>
 </template>

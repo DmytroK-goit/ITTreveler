@@ -15,7 +15,7 @@ const changeBtnVar = () => {
     <div class="text-grey mb-4">Додані маркери {{ counter }}</div>
     <div class="py-5">
       <IInput label="Some label" />
-      <a href="/" class="text-bolt" @click.prevent="() => console.log('prevent')">click</a>
+      <a href="/" class="text-bolt">click</a>
     </div>
     <FavoritePlace v-for="n in 4" :key="n" />
     <IButton class="w-full mt-10" :variant="btnVariant" @click="changeBtnVar"
