@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 
 const props = defineProps({
+  modelValue: String,
   label: String,
   placeholder: String,
   type: {
@@ -13,6 +14,8 @@ const props = defineProps({
 defineOptions({
   inheritAttrs: false, // щоб не передавати атрибути в input, а тільки ті, що вказані в props
 })
+
+defineEmits(['update:modelValue'])
 
 const text = ref('')
 const changeValue = (e) => {
@@ -27,7 +30,8 @@ const changeValue = (e) => {
       <input
         class="w-full text-sm rounded-[4px] border-[1px] py-2 px-3 focus:outline-primary"
         v-bind="{ ...$props, ...$attrs }"
-        @input="changeValue"
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
       />
       <!-- пропси :type="props.type" :placeholder="props.placeholder" всі пропси v-bind="props"-->
     </label>
