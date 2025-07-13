@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   modelValue: String,
@@ -15,8 +15,20 @@ defineOptions({
   inheritAttrs: false, // щоб не передавати атрибути в input, а тільки ті, що вказані в props
 })
 
-defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue'])
+const baseStyles =
+  'w-full text-sm rounded-[4px] border-[1px] border-[#eaeaea] py-2 px-3 focus:outline-primary'
 
+const isTextarea = computed(() => {
+  return props.type === 'textarea'
+})
+
+const inputStyles = computed(() => {
+  return isTextarea.value ? `${baseStyles} resize-none` : baseStyles
+})
+const componentName = computed(() => {
+  return isTextarea.value ? 'textarea' : 'input'
+})
 const text = ref('')
 const changeValue = (e) => {
   text.value = e.target.value
@@ -27,12 +39,16 @@ const changeValue = (e) => {
   <div class="w-full text-[#2c2c2c]">
     <label for="" class="block">
       <span class="block text-xs px-3 mb-2">{{ props.label }}</span>
-      <input
-        class="w-full text-sm rounded-[4px] border-[1px] py-2 px-3 focus:outline-primary"
+      <component
+        :is="componentName"
+        rows="3"
+        :class="inputStyles"
         v-bind="{ ...$props, ...$attrs }"
         :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-      />
+        @input="emit('update:modelValue', e.target.value)"
+      >
+      </component>
+
       <!-- пропси :type="props.type" :placeholder="props.placeholder" всі пропси v-bind="props"-->
     </label>
   </div>
