@@ -31,7 +31,7 @@ const componentName = computed(() => {
 })
 const text = ref('')
 const changeValue = (e) => {
-  text.value = e.target.value
+  emit('update:modelValue', e.target.value)
 }
 </script>
 
@@ -45,7 +45,7 @@ const changeValue = (e) => {
         :class="inputStyles"
         v-bind="{ ...$props, ...$attrs }"
         :value="modelValue"
-        @input="emit('update:modelValue', e.target.value)"
+        @input="changeValue"
       >
       </component>
 
