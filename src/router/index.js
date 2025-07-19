@@ -18,6 +18,7 @@ const routes = [
   {
     path: '/auth',
     component: AuthView,
+    redirect: '/auth/login',
     children: [
       {
         path: 'login',
