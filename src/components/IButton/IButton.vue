@@ -12,6 +12,10 @@ const props = defineProps({
     },
   },
   to: String,
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
 })
 const { variant } = toRef(props) //Деструктуризація пропсів
 
@@ -39,6 +43,9 @@ const link = computed(() => {
     :class="bgStyles"
     :to="link"
   >
-    <slot></slot>
+    <template v-if="props.isLoading"> Loading... </template>
+    <template v-else>
+      <slot></slot>
+    </template>
   </component>
 </template>
