@@ -25,7 +25,7 @@ const userData = reactive({ email: '', password: '' })
     <IInput label="Пароль" type="password" placeholder="Пароль" v-model="userData.password" />
 
     <IButton class="mt-10 w-full" variant="gradient" type="submit" :is-loading="props.isLoading">
-      Увійти</IButton
-    >
+      Увійти
+      </IButton>
   </form>
 </template>
