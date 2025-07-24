@@ -1,3 +1,4 @@
+import { router } from '@/router'
 import { clientFetch } from '../clientFetch'
 
 export const TOKEN_KEY = 'token'
@@ -8,17 +9,18 @@ class AuthService {
   isLoggedIn() {
     return Boolean(this.#token)
   }
+  getToken() {
+    return this.#token
+  }
 
   setToken(token) {
     localStorage.setItem(TOKEN_KEY, token)
-    clientFetch.defaults.headers.common = { Authorization: `Bearer ${token}` }
     this.#token = token
   }
 
   clearToken() {
     this.#token = null
     localStorage.removeItem(TOKEN_KEY)
-    clientFetch.default.headers.common = {}
   }
 
   async login(body) {
@@ -42,8 +44,36 @@ class AuthService {
   }
 
   async refresh() {
-    return clientFetch.get('/user/refresh')
+    const { data } = await clientFetch.post('/user/refresh')
+    const { accessToken } = data
+    this.setToken(accessToken)
   }
 }
 
 export const authService = new AuthService()
+
+clientFetch.interceptors.request.use((request) => {
+  const token = authService.getToken()
+  if (token) {
+    request.headers = {
+      ...request.headers,
+      Authorization: `Bearer ${token}`,
+    }
+  }
+  return request
+})
+clientFetch.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const errorCode = error.response?.statusCode
+    if (errorCode === 401) {
+      try {
+        await authService.refresh()
+      } catch (e) {
+        router.push('/auth/login')
+        return Promise.reject(e)
+      }
+    }
+    return Promise.reject(error)
+  },
+)
