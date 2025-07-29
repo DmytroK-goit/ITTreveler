@@ -10,6 +10,7 @@ import { onMounted, ref } from 'vue'
 const favoritePlaces = ref([])
 const activeId = ref(null)
 const map = ref(null)
+const mapMarkerLngLat = ref(null)
 const changeActiveId = (id) => {
   activeId.value = id
 }
@@ -20,6 +21,10 @@ const changePlace = (id) => {
     center: lngLat,
     zoom: 14,
   })
+}
+
+const handleMapClick = ({ lngLat }) => {
+  mapMarkerLngLat.value = [lngLat.lng, lngLat.lat]
 }
 onMounted(async () => {
   const { data } = await getFavoritePlaces()
@@ -38,10 +43,21 @@ onMounted(async () => {
         :zoom="10"
         :access-token="mapSettings.apiToken"
         :map-style="mapSettings.style"
+        @mb-click="handleMapClick"
         :mb-created="(mapInstance) => (map = mapInstance)"
       >
-        <MapboxMarker v-for="place in favoritePlaces" :key="place.id" :lngLat="place.lngLat">
-          <button @click="changeActiveId(place.id)"><MarkerIcon class="h-8 w-8" /></button>
+        <MapboxMarker v-if="mapMarkerLngLat" :lngLat="mapMarkerLngLat" anchor="bottom">
+          <MarkerIcon class="h-8 w-8" />
+        </MapboxMarker>
+        <MapboxMarker
+          v-for="place in favoritePlaces"
+          :key="place.id"
+          :lngLat="place.lngLat"
+          anchor="bottom"
+        >
+          <button @click="changeActiveId(place.id)">
+            <MarkerIcon class="h-8 w-8" />
+          </button>
         </MapboxMarker>
       </MapboxMap>
     </div>
