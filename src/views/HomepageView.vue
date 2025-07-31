@@ -10,14 +10,13 @@ import { useModal } from '@/composables/useModal'
 import CreateNewPlaceModal from '@/components/CreateNewPlaceModal/CreateNewPlaceModal.vue'
 import { useMutation } from '@/composables/useMutation'
 
-// const favoritePlaces = ref([])
 const activeId = ref(null)
 const map = ref(null)
 const mapMarkerLngLat = ref(null)
 const { isOpen, openModal, closeModal } = useModal()
 
 const { data, mutation: getPlaces } = useMutation({
-  mutationfn: getFavoritePlaces(),
+  mutationfn: () => getFavoritePlaces(),
 })
 
 const favoritePlaces = computed(() => data.value?.data ?? [])
@@ -30,6 +29,7 @@ const {
   onSuccess: () => {
     closeModal()
     mapMarkerLngLat.value = null
+    getPlaces()
   },
 })
 const changeActiveId = (id) => {
