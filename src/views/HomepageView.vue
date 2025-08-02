@@ -88,7 +88,7 @@ onMounted(() => {
         :mb-created="(mapInstance) => (map = mapInstance)"
       >
         <MapboxMarker v-if="mapMarkerLngLat" :lngLat="mapMarkerLngLat" anchor="bottom">
-          <MarkerIcon class="h-8 w-8" />
+          <MarkerIcon class="h-8 w-8" is-active />
         </MapboxMarker>
         <MapboxMarker
           v-for="place in favoritePlaces"
