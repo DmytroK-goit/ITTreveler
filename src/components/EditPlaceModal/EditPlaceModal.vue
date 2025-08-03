@@ -12,9 +12,14 @@ const props = defineProps({
     default: false,
     type: Boolean,
   },
+  isLoading: {
+    default: false,
+    type: Boolean,
+  },
+  place: Object,
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'submit'])
 const formData = ref({
   id: '',
   title: '',
@@ -30,8 +35,8 @@ watch(
     }
   },
 )
-const handleChangeImg = (img) => {
-  formData.value.img = img
+const handleChangeImg = (url) => {
+  formData.value.img = url
 }
 </script>
 
@@ -42,7 +47,7 @@ const handleChangeImg = (img) => {
         <MarkerIcon height="18" width="18" />
         <span class="font-bold text-base">Редагувати маркер</span>
       </div>
-      <form>
+      <form @submit.prevent="emit('submit', formData)">
         <div class="flex gap-5">
           <div class="w-5/12">
             <img
@@ -57,7 +62,9 @@ const handleChangeImg = (img) => {
             <div class="mt-4">
               <IInput label="Опис" type="textarea" v-model="formData.description" />
             </div>
-            <IButton class="mt-10 w-full" variant="gradient">Зберегти</IButton>
+            <IButton class="mt-10 w-full" variant="gradient" :is-loading="isLoading">
+              Зберегти
+            </IButton>
           </div>
         </div>
 

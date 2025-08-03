@@ -4,6 +4,8 @@ import EditPlaceModal from '../EditPlaceModal/EditPlaceModal.vue'
 import FavoritePlace from '../FavoritePlace/FavoritePlace.vue'
 import IButton from '../IButton/IButton.vue'
 import { useModal } from '@/composables/useModal'
+import { useMutation } from '@/composables/useMutation'
+import { updateFavoritePlaces } from '@/api/favorite-places'
 
 const props = defineProps({
   items: {
@@ -15,15 +17,25 @@ const props = defineProps({
     type: [String, null],
   },
 })
-const emit = defineEmits(['place-clicked', 'create'])
+const emit = defineEmits(['place-clicked', 'create', 'updated'])
 const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal()
 
+const { mutation: updatePlace, isLoading } = useMutation({
+  mutationfn: (formData) => updateFavoritePlaces(formData),
+  onSuccess: () => {
+    closeEditModal(), emit('updated')
+  },
+})
 const selectedId = ref(null)
 const selectedItem = computed(() => props.items.find((place) => place.id === selectedId.value))
 
 const handleEditPlace = (id) => {
   selectedId.value = id
   openEditModal()
+}
+
+const handleSubmit = (formdata) => {
+  updatePlace(formdata)
 }
 </script>
 
@@ -44,7 +56,13 @@ const handleEditPlace = (id) => {
         @click="emit('place-clicked', place.id)"
         @edit="handleEditPlace(place.id)"
       />
-      <EditPlaceModal :is-open="isEditOpen" :place="selectedItem" @close="closeEditModal" />
+      <EditPlaceModal
+        :is-open="isEditOpen"
+        :place="selectedItem"
+        :is-loading="isLoading"
+        @close="closeEditModal"
+        @submit="handleSubmit"
+      />
     </slot>
     <slot></slot>
     <IButton class="w-full mt-10" variant="gradient" @click="emit('create')">Додати маркер</IButton>
