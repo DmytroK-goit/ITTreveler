@@ -20,6 +20,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['place-clicked', 'create', 'updated'])
 const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal()
+const idOfDelItem = ref(null)
 const {
   isOpen: isConfirmationModalOpen,
   openModal: openConfirmationModal,
@@ -38,20 +39,16 @@ const {
   isLoading: isDeleting,
   error: deleteError,
 } = useMutation({
-  mutationfn: (id) => deleteFavoritePlaces({ id }),
+  mutationfn: (id) => deleteFavoritePlaces(id),
   onSuccess: () => {
     closeConfirmationModal()
+    idOfDelItem.value = null
     emit('updated')
   },
 })
 
-const handleDeletePlace = (id) => {
-  deletePlace(id)
-}
-
 const selectedId = ref(null)
 const selectedItem = computed(() => props.items.find((place) => place.id === selectedId.value))
-const idOfDelItem = ref(null)
 
 const handleEditPlace = (id) => {
   selectedId.value = id
@@ -61,7 +58,13 @@ const handleEditPlace = (id) => {
 const handleSubmit = (formdata) => {
   updatePlace(formdata)
 }
-const handleOpenConfirmationModal=
+const handleOpenConfirmationModal = (id) => {
+  idOfDelItem.value = id
+  openConfirmationModal()
+}
+const handleDeletePlace = () => {
+  deletePlace(idOfDelItem.value)
+}
 </script>
 
 <template>
@@ -80,7 +83,7 @@ const handleOpenConfirmationModal=
         :is-Active="place.id === props.activeId"
         @click="emit('place-clicked', place.id)"
         @edit="handleEditPlace(place.id)"
-        @delete="openConfirmationModal"
+        @delete="handleOpenConfirmationModal(place.id)"
       />
       <EditPlaceModal
         :is-open="isEditOpen"
@@ -91,6 +94,8 @@ const handleOpenConfirmationModal=
       />
       <ConfirmationModal
         :is-open="isConfirmationModalOpen"
+        :is-loading="isDeleting"
+        :has-error="deleteError"
         @cancel="closeConfirmationModal"
         @confirm="handleDeletePlace"
         title="Ви дійсно хочете видалити улюблене місце"

@@ -15,8 +15,15 @@ const map = ref(null)
 const mapMarkerLngLat = ref(null)
 const { isOpen, openModal, closeModal } = useModal()
 
-const { data, mutation: getPlaces } = useMutation({
+const {
+  data,
+  mutation: getPlaces,
+  isLoading: isPlacesLoading,
+} = useMutation({
   mutationfn: () => getFavoritePlaces(),
+  onSuccess: () => {
+    isPlacesLoading.value = false
+  },
 })
 
 const favoritePlaces = computed(() => data.value ?? [])
@@ -63,6 +70,7 @@ onMounted(() => {
 <template>
   <main class="flex h-screen">
     <div class="bg-white h-full w-[400px] shrink-0 overflow-a uto pb-10">
+      <div v-if="isPlacesLoading">Loading...</div>
       <FavoritePlaces
         :items="favoritePlaces"
         :active-id="activeId"

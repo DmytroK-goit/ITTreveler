@@ -15,6 +15,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  hasError: {
+    type: Boolean,
+    default: false,
+  },
 })
 const emit = defineEmits(['cancel', 'confirm'])
 </script>
@@ -27,5 +31,6 @@ const emit = defineEmits(['cancel', 'confirm'])
         >Підтвердити</IButton
       >
     </div>
+    <div v-if="hasError" class="text-red-500">Щось пішло не так</div>
   </IModal>
 </template>
