@@ -17,6 +17,10 @@ const props = defineProps({
     required: true,
     type: [String, null],
   },
+  isPlacesLoading: {
+    type: Boolean,
+    default: false,
+  },
 })
 const emit = defineEmits(['place-clicked', 'create', 'updated'])
 const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal()
@@ -73,7 +77,7 @@ const handleDeletePlace = () => {
 
     <slot name="label"></slot>
     <slot name="list">
-      <div v-if="items.length === 0">Список порожній</div>
+      <div v-if="items.length === 0 && !isPlacesLoading">Список порожній</div>
       <FavoritePlace
         v-for="place in props.items"
         :key="place.id"

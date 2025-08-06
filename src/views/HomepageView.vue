@@ -70,10 +70,11 @@ onMounted(() => {
 <template>
   <main class="flex h-screen">
     <div class="bg-white h-full w-[400px] shrink-0 overflow-a uto pb-10">
-      <div v-if="isPlacesLoading">Loading...</div>
+      <div v-if="isPlacesLoading" class="text-black px-6">Loading...</div>
       <FavoritePlaces
         :items="favoritePlaces"
         :active-id="activeId"
+        :isPlacesLoading="isPlacesLoading"
         @place-clicked="changePlace"
         @create="openModal"
         @updated="getPlaces"
