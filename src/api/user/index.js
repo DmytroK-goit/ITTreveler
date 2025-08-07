@@ -14,3 +14,6 @@ export const logout = () => {
 export const refresh = () => {
   return clientFetch.get('/user/refresh')
 }
+export const getUserInfo = () => {
+  return clientFetch.get('/user/me')
+}
