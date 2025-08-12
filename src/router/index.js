@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const HomePageView = () => import('@/views/HomepageView.vue')
+const HomePageView = () => import('@/stores/HomePageView.vue')
 const GreetingView = () => import('@/views/GreatingView.vue')
 const AuthView = () => import('@/views/AuthView.vue')
 const LoginPage = () => import('@/views/Login.vue')
