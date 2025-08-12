@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// const HomePageView = () => import('@/views/HomePageView.vue')
+const HomepageView = () => import('@/views/HomepageView.vue')
 const GreetingView = () => import('@/views/GreatingView.vue')
 const AuthView = () => import('@/views/AuthView.vue')
 const LoginPage = () => import('@/views/Login.vue')
 const RegistrationPage = () => import('@/views/RegistrationView.vue')
 import { authService } from '../api/authService/index'
-import HomePageView from '@/views/HomepageView.vue'
 
 const routes = [
   {
@@ -16,7 +15,7 @@ const routes = [
   },
   {
     path: '/map',
-    component: HomePageView,
+    component: HomepageView,
     name: 'homepage',
   },
   {
