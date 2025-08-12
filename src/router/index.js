@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const HomepageView = () => import('@/views/HomepageView.vue')
+const HomePageView = () => import('@/views/HomePageView.vue')
 const GreetingView = () => import('@/views/GreatingView.vue')
 const AuthView = () => import('@/views/AuthView.vue')
 const LoginPage = () => import('@/views/Login.vue')
@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: '/map',
-    component: HomepageView,
+    component: HomePageView,
     name: 'homepage',
   },
   {
